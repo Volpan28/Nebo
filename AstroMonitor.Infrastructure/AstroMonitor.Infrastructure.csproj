@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\AstroMonitor.Application\AstroMonitor.Application.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Caching\" />
+      <Folder Include="NasaClient\" />
+    </ItemGroup>
+
+</Project>

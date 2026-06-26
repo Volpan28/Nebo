@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AstroMonitor.Domain", "AstroMonitor.Domain\AstroMonitor.Domain.csproj", "{2E0117C5-CA1B-449F-AD74-A33AA3E337C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AstroMonitor.Application", "AstroMonitor.Application\AstroMonitor.Application.csproj", "{A866A7A8-DF55-456C-87AA-1008C5D0EC28}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AstroMonitor.Infrastructure", "AstroMonitor.Infrastructure\AstroMonitor.Infrastructure.csproj", "{524DDCD6-9856-44C3-AD8F-14544A61DD71}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AstroMonitor.Persistence", "AstroMonitor.Persistence\AstroMonitor.Persistence.csproj", "{1B8A232A-B46E-494C-B3AE-277987E5EE8D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AstroMonitor.Api", "AstroMonitor.Api\AstroMonitor.Api.csproj", "{00972102-92F1-4178-8153-036F5606A498}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2E0117C5-CA1B-449F-AD74-A33AA3E337C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E0117C5-CA1B-449F-AD74-A33AA3E337C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E0117C5-CA1B-449F-AD74-A33AA3E337C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E0117C5-CA1B-449F-AD74-A33AA3E337C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A866A7A8-DF55-456C-87AA-1008C5D0EC28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A866A7A8-DF55-456C-87AA-1008C5D0EC28}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A866A7A8-DF55-456C-87AA-1008C5D0EC28}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A866A7A8-DF55-456C-87AA-1008C5D0EC28}.Release|Any CPU.Build.0 = Release|Any CPU
+		{524DDCD6-9856-44C3-AD8F-14544A61DD71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{524DDCD6-9856-44C3-AD8F-14544A61DD71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{524DDCD6-9856-44C3-AD8F-14544A61DD71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{524DDCD6-9856-44C3-AD8F-14544A61DD71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B8A232A-B46E-494C-B3AE-277987E5EE8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B8A232A-B46E-494C-B3AE-277987E5EE8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B8A232A-B46E-494C-B3AE-277987E5EE8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B8A232A-B46E-494C-B3AE-277987E5EE8D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00972102-92F1-4178-8153-036F5606A498}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00972102-92F1-4178-8153-036F5606A498}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00972102-92F1-4178-8153-036F5606A498}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00972102-92F1-4178-8153-036F5606A498}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
