@@ -11,11 +11,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Common\Behaviors\" />
-      <Folder Include="Features\Asteroids\Queries\" />
-    </ItemGroup>
-
-    <ItemGroup>
+      <PackageReference Include="Dapper" Version="2.1.79" />
       <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
       <PackageReference Include="MediatR" Version="14.1.0" />
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.17" />
