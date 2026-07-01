@@ -1,7 +1,7 @@
 ﻿using AstroMonitor.Domain.Entities;
 using MediatR;
 
-namespace AstroMonitor.Application.Features.Asteroids.Commands;
+namespace AstroMonitor.Application.Features.Asteroids.Commands.CreateAsteroids;
 
 public record CreateAsteroidCommand (
     string Id, 

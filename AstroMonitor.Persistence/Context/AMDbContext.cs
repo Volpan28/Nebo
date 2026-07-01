@@ -40,5 +40,19 @@ public class AMDbContext : IdentityDbContext<ApplicationUser>, IAMDbContext
                 NormalizedName = "ADMIN"
             }
         );
+
+        foreach (var entityType in builder.Model.GetEntityTypes())
+        {
+            var properties = entityType.GetProperties()
+                .Where(p => p.ClrType == typeof(DateTimeOffset) 
+                            || p.ClrType == typeof(DateTimeOffset?));
+
+            foreach (var property in properties)
+            {
+                property.SetValueConverter(new Microsoft.EntityFrameworkCore.Storage.ValueConversion.ValueConverter<DateTimeOffset, DateTimeOffset>(
+                    v => v.ToUniversalTime(),
+                    v => v));
+            }
+        }
     }
 }

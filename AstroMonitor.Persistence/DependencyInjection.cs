@@ -1,4 +1,5 @@
 ﻿using AstroMonitor.Application.Common.Interfaces;
+using AstroMonitor.Persistence.Connections;
 using AstroMonitor.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -12,13 +13,17 @@ public static class DependencyInjection
         this IServiceCollection services,
         IConfiguration configuration)
     {
-        var connectionString = configuration.GetConnectionString("DefaultConnection");
+        var connectionString = configuration.GetConnectionString("DefaultConnection")
+            ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
         
         services.AddDbContext<AMDbContext>(options => 
             options.UseNpgsql(connectionString));
         
         services.AddScoped<IAMDbContext>(provider => 
             provider.GetRequiredService<AMDbContext>());
+
+        services.AddSingleton<ISqlConnectionFactory>(provider =>
+            new SqlConnectionFactory(connectionString));
         
         return services;
     }

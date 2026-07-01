@@ -1,4 +1,5 @@
-﻿using AstroMonitor.Application.Features.Asteroids.Commands;
+﻿using AstroMonitor.Application.Features.Asteroids.Commands.CreateAsteroids;
+using AstroMonitor.Application.Features.Asteroids.Commands.SyncAsteroids;
 using AstroMonitor.Application.Features.Asteroids.Queries.GetAsteroids;
 using AstroMonitor.Domain.Entities;
 using MediatR;
@@ -17,12 +18,12 @@ public class AsteroidsController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CreateAsteroid([FromBody] CreateAsteroidCommand command)
-    {
-        var response = await _mediator.Send(command);
-        return Ok(response);
-    }
+    // [HttpPost]
+    // public async Task<IActionResult> CreateAsteroid([FromBody] CreateAsteroidCommand command)
+    // {
+    //     var response = await _mediator.Send(command);
+    //     return Ok(response);
+    // }
 
     [HttpGet]
     public async Task<IActionResult> GetAsteroids([FromQuery] int limit = 10)
@@ -30,5 +31,12 @@ public class AsteroidsController : ControllerBase
         var query = new GetAsteroidsQuery(limit);
         var response = await _mediator.Send(query);
         return Ok(response);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> SyncAsteroids([FromBody] SyncAsteroidsCommand command)
+    {
+        var response = await _mediator.Send(command);
+        return Ok(new {SyncedCount = response});
     }
 }

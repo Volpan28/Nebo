@@ -14,7 +14,7 @@ public class AsteroidConfiguration : IEntityTypeConfiguration<Asteroid>
 
         builder.Property(a => a.Name)
             .IsRequired()
-            .HasMaxLength(20);
+            .HasMaxLength(40);
 
         builder.Property(a => a.MinDiameterMeters)
             .IsRequired()

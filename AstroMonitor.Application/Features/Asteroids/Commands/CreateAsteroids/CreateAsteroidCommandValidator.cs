@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace AstroMonitor.Application.Features.Asteroids.Commands;
+namespace AstroMonitor.Application.Features.Asteroids.Commands.CreateAsteroids;
 
 public class CreateAsteroidCommandValidator : AbstractValidator<CreateAsteroidCommand>
 {
@@ -11,7 +11,7 @@ public class CreateAsteroidCommandValidator : AbstractValidator<CreateAsteroidCo
         
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Name is required.")
-            .MaximumLength(20).WithMessage("Name must not exceed 20 characters.");
+            .MaximumLength(40).WithMessage("Name must not exceed 40 characters.");
 
         RuleFor(x => x.MinDiameterMeters)
             .GreaterThan(0).WithMessage("Min diameter meters must be greater than zero.");
