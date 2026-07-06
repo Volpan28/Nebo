@@ -17,12 +17,35 @@ public class GetAsteroidsQueryHandler : IRequestHandler<GetAsteroidsQuery, IEnum
     {
         using var connection = _sqlConnection.CreateConnection();
         
-        var sql = "SELECT \"Id\", \"Name\", \"ClosestApproachDate\", \"IsPotentiallyHazardous\" " +
-                  "FROM asteroids " +
-                  "LIMIT @Limit; ";
+        var sql = "SELECT * FROM Asteroids WHERE 1=1 ";
+        
+        var parameters = new DynamicParameters();
+
+        if (request.OnlyHazardous)
+        {
+            sql += "AND \"IsPotentiallyHazardous\" = @OnlyHazardous ";
+            parameters.Add("OnlyHazardous", request.OnlyHazardous);
+        }
+        
+        sql += "ORDER BY ABS(EXTRACT(EPOCH FROM (\"ClosestApproachDate\" - NOW()))) ASC ";
+        
+        if (request.Limit.HasValue)
+        {
+            sql += "LIMIT @Limit ";
+            parameters.Add("Limit", request.Limit.Value);
+        }
+        else if (request.PageSize > 0 && request.Page > 0)
+        {
+            var offset = (request.Page - 1) * request.PageSize;
+
+            sql += "LIMIT @PageSize OFFSET @Offset ";
+            parameters.Add("PageSize", request.PageSize);
+            parameters.Add("Offset", offset);
+        }
+
         
         var asteroids = await connection
-            .QueryAsync<AsteroidDto>(sql, new { Limit = request.Limit });
+            .QueryAsync<AsteroidDto>(sql, parameters);
         
         return asteroids;
     }

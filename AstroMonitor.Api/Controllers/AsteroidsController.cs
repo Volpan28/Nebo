@@ -26,10 +26,9 @@ public class AsteroidsController : ControllerBase
     // }
 
     [HttpGet]
-    public async Task<IActionResult> GetAsteroids([FromQuery] int limit = 10)
+    public async Task<IActionResult> GetAsteroids([FromQuery] GetAsteroidsQuery request)
     {
-        var query = new GetAsteroidsQuery(limit);
-        var response = await _mediator.Send(query);
+        var response = await _mediator.Send(request);
         return Ok(response);
     }
 

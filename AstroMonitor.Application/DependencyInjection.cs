@@ -1,4 +1,6 @@
 ﻿using AstroMonitor.Application.Common.Behaviors;
+using AstroMonitor.Application.Common.Interfaces;
+using AstroMonitor.Domain.Identity;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;

@@ -1,9 +1,12 @@
 ﻿using AstroMonitor.Application.Common.Interfaces;
+using AstroMonitor.Domain.Identity;
 using AstroMonitor.Persistence.Connections;
 using AstroMonitor.Persistence.Context;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
 
 namespace AstroMonitor.Persistence;
 
@@ -24,6 +27,11 @@ public static class DependencyInjection
 
         services.AddSingleton<ISqlConnectionFactory>(provider =>
             new SqlConnectionFactory(connectionString));
+
+        services.AddIdentityCore<ApplicationUser>()
+            .AddRoles<IdentityRole>()
+            .AddRoleManager<RoleManager<IdentityRole>>()
+            .AddEntityFrameworkStores<AMDbContext>();
         
         return services;
     }

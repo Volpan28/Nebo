@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
+﻿using AstroMonitor.Application.Common.Exceptions;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AstroMonitor.Api.ExceptionHandlers;
@@ -39,6 +40,22 @@ public class GlobalExceptionHandler : IExceptionHandler
             problemDetails.Extensions["errors"] = errors;
             
             await httpContext.Response.WriteAsJsonAsync(problemDetails, cancellationToken);
+            return true;
+        }
+
+        if (exception is InvalidCredentialsExceptions invalidCredentialsException)
+        {
+            httpContext.Response.StatusCode = StatusCodes.Status401Unauthorized;
+
+            var authErrorDetails = new ProblemDetails
+            {
+                Status = StatusCodes.Status401Unauthorized,
+                Type = "about:blank",
+                Title = "Unauthorized",
+                Detail = invalidCredentialsException.Message
+            };
+            
+            await httpContext.Response.WriteAsJsonAsync(authErrorDetails, cancellationToken);
             return true;
         }
         

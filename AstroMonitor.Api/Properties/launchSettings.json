@@ -8,7 +8,12 @@
       "applicationUrl": "http://localhost:5162",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "NasaApi__ApiKey": "QwhwCHqFvyCtAXOIfJaKZe9sPGISBCP6xewfpXEs"
+        "NasaApi__ApiKey": "QwhwCHqFvyCtAXOIfJaKZe9sPGISBCP6xewfpXEs",
+        "JwtSettings__Key": "0a77324485fec627b24c108ba0e75b4a",
+        "JwtSettings__Issuer": "AstroMonitorApi",
+        "JwtSettings__Audience": "AstroMonitorApi",
+        "JwtSettings__AccessExpiryMinutes": "15",
+        "JwtSettings__RefreshExpiryDays" : "30"
       }
     },
     "https": {
