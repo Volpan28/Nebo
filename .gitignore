@@ -7,7 +7,7 @@
 .env
 
 # .NET launch settings
-launchSettings.json
+**/Properties/launchSettings.json
 
 # User-specific files
 *.rsuser
