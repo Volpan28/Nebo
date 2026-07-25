@@ -46,7 +46,7 @@ public class JwtTokenGenerator : IJwtTokenGenerator
         };
 
         var handler = new JsonWebTokenHandler();
-        string accsesToken = handler.CreateToken(tokenDescriptor);
+        string accessToken = handler.CreateToken(tokenDescriptor);
 
         var randomNumber = new byte[32];
         using var rng = RandomNumberGenerator.Create();
@@ -55,6 +55,6 @@ public class JwtTokenGenerator : IJwtTokenGenerator
 
         DateTime refreshTokenExpiresAt = DateTime.UtcNow.AddDays(_options.RefreshExpiryDays);
         
-        return new TokenResponse(accsesToken, refreshToken, refreshTokenExpiresAt);
+        return new TokenResponse(accessToken, refreshToken, refreshTokenExpiresAt);
     }
 }

@@ -18,13 +18,6 @@ public class AsteroidsController : ControllerBase
         _mediator = mediator;
     }
 
-    // [HttpPost]
-    // public async Task<IActionResult> CreateAsteroid([FromBody] CreateAsteroidCommand command)
-    // {
-    //     var response = await _mediator.Send(command);
-    //     return Ok(response);
-    // }
-
     [HttpGet]
     public async Task<IActionResult> GetAsteroids([FromQuery] GetAsteroidsQuery request)
     {
