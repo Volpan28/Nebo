@@ -16,6 +16,7 @@ public class AMDbContext : IdentityDbContext<ApplicationUser>, IAMDbContext
     }
     
     public DbSet<Asteroid> Asteroids => Set<Asteroid>();
+    public DbSet<WatchlistItem> WatchlistItems => Set<WatchlistItem>();
 
     public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) => base.SaveChangesAsync(cancellationToken);
     public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default) => base.Database.BeginTransactionAsync(cancellationToken);
