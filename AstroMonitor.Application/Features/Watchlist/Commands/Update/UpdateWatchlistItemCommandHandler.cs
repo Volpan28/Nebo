@@ -17,7 +17,7 @@ public class UpdateWatchlistItemCommandHandler : IRequestHandler<UpdateWatchlist
     public async Task<string> Handle(UpdateWatchlistItemCommand request, CancellationToken cancellationToken)
     {
         var item = await _context.WatchlistItems
-            .FirstOrDefaultAsync(w => w.UserId == request.UserId && w.ObjectId == request.ObjectId);
+            .FirstOrDefaultAsync(w => w.UserId == request.UserId && w.ObjectId == request.ObjectId, cancellationToken);
 
         if (item == null)
         {
