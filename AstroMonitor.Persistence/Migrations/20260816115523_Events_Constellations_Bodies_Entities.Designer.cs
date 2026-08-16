@@ -3,6 +3,7 @@ using System;
 using AstroMonitor.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AstroMonitor.Persistence.Migrations
 {
     [DbContext(typeof(AMDbContext))]
-    partial class AMDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260816115523_Events_Constellations_Bodies_Entities")]
+    partial class Events_Constellations_Bodies_Entities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -17,6 +17,10 @@ public class AMDbContext : IdentityDbContext<ApplicationUser>, IAMDbContext
     
     public DbSet<Asteroid> Asteroids => Set<Asteroid>();
     public DbSet<WatchlistItem> WatchlistItems => Set<WatchlistItem>();
+    public DbSet<Star> Stars => Set<Star>();
+    public DbSet<AstronomicalEvent> AstronomicalEvents => Set<AstronomicalEvent>();
+    public DbSet<Constellation> Constellations => Set<Constellation>();
+    public DbSet<SolarSystemBody> SolarSystemBodies => Set<SolarSystemBody>();
 
     public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) => base.SaveChangesAsync(cancellationToken);
     public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default) => base.Database.BeginTransactionAsync(cancellationToken);

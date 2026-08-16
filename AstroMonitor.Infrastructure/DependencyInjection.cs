@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using AstroMonitor.Application.Common.Interfaces;
+using AstroMonitor.Infrastructure.Files.Parsers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using AstroMonitor.Infrastructure.NasaApi;
 using AstroMonitor.Infrastructure.NasaApi.Options;
@@ -56,7 +57,7 @@ public static class DependencyInjection
         
         services.AddScoped<IUserManager, UserManagerService>();
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
-        
+        services.AddScoped<IStarCsvParser, StarCsvParser>();
         return services;
     }
 }

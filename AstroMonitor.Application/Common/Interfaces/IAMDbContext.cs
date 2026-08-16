@@ -8,6 +8,10 @@ public interface IAMDbContext
 {
     DbSet<Asteroid> Asteroids { get; }
     DbSet<WatchlistItem> WatchlistItems { get; }
+    DbSet<Star> Stars { get; }
+    DbSet<AstronomicalEvent> AstronomicalEvents { get; }
+    DbSet<Constellation> Constellations { get; }
+    DbSet<SolarSystemBody> SolarSystemBodies { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken);
 }
