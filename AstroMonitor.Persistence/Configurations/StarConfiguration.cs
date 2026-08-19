@@ -39,7 +39,7 @@ public class StarConfiguration : IEntityTypeConfiguration<Star>
         builder.HasOne(s => s.Constellation)
             .WithMany()
             .HasForeignKey(a => a.ConstellationId)
-            .IsRequired()
-            .OnDelete(DeleteBehavior.Cascade);
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.SetNull);
     }
 }

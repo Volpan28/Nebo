@@ -1,14 +1,10 @@
 ﻿using System.Globalization;
+using AstroMonitor.Application.Common.Interfaces;
 using AstroMonitor.Domain.Entities;
 using CsvHelper;
 using CsvHelper.Configuration;
 
 namespace AstroMonitor.Infrastructure.Files.Parsers;
-
-public interface IStarCsvParser
-{
-    IEnumerable<Star> Parse(Stream csvStream, double maxMagnitude = 6.5);
-}
 
 public class StarCsvParser : IStarCsvParser
 {
