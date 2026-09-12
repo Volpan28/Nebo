@@ -1,4 +1,5 @@
 ﻿using AstroMonitor.Application.Features.Stars.Queries;
+using AstroMonitor.Application.Features.Stars.Queries.GetVisible;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -22,5 +23,16 @@ public class StarController : ApiControllerBase
     {
         var response = await _mediator.Send(request);
         return Ok(response);
+    }
+    
+    [HttpGet("visible")]
+    public async Task<IActionResult> GetVisibleStars(
+        [FromQuery] double lat, 
+        [FromQuery] double lon, 
+        [FromQuery] double? minAltitude)
+    {
+        var query = new GetVisibleStarsQuery(lat, lon, minAltitude);
+        var result = await _mediator.Send(query);
+        return Ok(result);
     }
 }
