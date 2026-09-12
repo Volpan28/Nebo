@@ -58,6 +58,7 @@ public static class DependencyInjection
         services.AddScoped<IUserManager, UserManagerService>();
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
         services.AddScoped<IStarCsvParser, StarCsvParser>();
+        services.AddScoped<IAstronomyMathService, AstronomyMathService>();
         return services;
     }
 }
