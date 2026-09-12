@@ -1,5 +1,6 @@
 ﻿using AstroMonitor.Application.Features.Imports.ImportStars.Commands;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AstroMonitor.Api.Controllers;
@@ -16,6 +17,7 @@ public class AdminController : ApiControllerBase
     }
 
     [HttpPost("import")]
+    [Authorize]
     [DisableRequestSizeLimit]
     public async Task<IActionResult> ImportStars([FromForm] IFormFile file, CancellationToken cancellationToken)
     {

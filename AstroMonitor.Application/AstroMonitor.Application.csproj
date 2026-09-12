@@ -18,8 +18,4 @@
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.17" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Features\Stars\" />
-    </ItemGroup>
-
 </Project>
