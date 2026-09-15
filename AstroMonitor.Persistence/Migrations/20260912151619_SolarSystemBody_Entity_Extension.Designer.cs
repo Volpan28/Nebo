@@ -3,6 +3,7 @@ using System;
 using AstroMonitor.Persistence.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace AstroMonitor.Persistence.Migrations
 {
     [DbContext(typeof(AMDbContext))]
-    partial class AMDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260912151619_SolarSystemBody_Entity_Extension")]
+    partial class SolarSystemBody_Entity_Extension
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -128,10 +131,6 @@ namespace AstroMonitor.Persistence.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
 
-                    b.Property<string>("ImageUrl")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
                     b.Property<string>("LatinName")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -140,53 +139,6 @@ namespace AstroMonitor.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Constellation", (string)null);
-                });
-
-            modelBuilder.Entity("AstroMonitor.Domain.Entities.DeepSkyObject", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("text");
-
-                    b.Property<string>("CatalogName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<string>("ConstellationId")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<double>("Declination")
-                        .HasColumnType("double precision");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
-
-                    b.Property<double>("Magnitude")
-                        .HasColumnType("double precision");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("character varying(150)");
-
-                    b.Property<double>("RightAscension")
-                        .HasColumnType("double precision");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ConstellationId");
-
-                    b.ToTable("DeepSkyObjects");
                 });
 
             modelBuilder.Entity("AstroMonitor.Domain.Entities.SolarSystemBody", b =>
@@ -210,10 +162,6 @@ namespace AstroMonitor.Persistence.Migrations
 
                     b.Property<double>("Epoch")
                         .HasColumnType("double precision");
-
-                    b.Property<string>("ImageUrl")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
 
                     b.Property<double>("Inclination")
                         .HasColumnType("double precision");
@@ -261,16 +209,9 @@ namespace AstroMonitor.Persistence.Migrations
                         .HasPrecision(4, 2)
                         .HasColumnType("double precision");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
                     b.Property<double>("Distance")
                         .HasPrecision(10, 2)
                         .HasColumnType("double precision");
-
-                    b.Property<string>("ImageUrl")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
 
                     b.Property<double>("Magnitude")
                         .HasPrecision(4, 2)
@@ -565,17 +506,6 @@ namespace AstroMonitor.Persistence.Migrations
                         .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("AstroMonitor.Domain.Entities.DeepSkyObject", b =>
-                {
-                    b.HasOne("AstroMonitor.Domain.Entities.Constellation", "Constellation")
-                        .WithMany()
-                        .HasForeignKey("ConstellationId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Constellation");
                 });
 
             modelBuilder.Entity("AstroMonitor.Domain.Entities.Star", b =>

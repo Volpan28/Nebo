@@ -12,6 +12,7 @@ public interface IAMDbContext
     DbSet<AstronomicalEvent> AstronomicalEvents { get; }
     DbSet<Constellation> Constellations { get; }
     DbSet<SolarSystemBody> SolarSystemBodies { get; }
+    DbSet<DeepSkyObject> DeepSkyObjects { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken);
 }

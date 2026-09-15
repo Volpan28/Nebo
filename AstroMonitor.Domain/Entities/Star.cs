@@ -9,6 +9,8 @@ public class Star
     public double Distance { get; private set; }
     public double Magnitude { get; private set; }
     public double? ColorIndex { get; private set; }
+    public string? Description { get; private set; }
+    public string? ImageUrl { get; private set; }
     
     public string? ConstellationId { get; private set; }
     public Constellation? Constellation { get; private set; }
@@ -16,7 +18,7 @@ public class Star
     private Star() {}
 
     public Star(string id, string properName, double rightAscension, double declination, double distance,
-        double magnitude, double colorIndex, string constellationId)
+        double magnitude, double colorIndex, string description, string imageUrl, string constellationId)
     {
         Id = id;
         ProperName = properName;
@@ -25,6 +27,8 @@ public class Star
         Distance = distance;
         Magnitude = magnitude;
         ColorIndex = colorIndex;
+        Description = description;
+        ImageUrl = imageUrl;
         ConstellationId = constellationId;
     }
 }

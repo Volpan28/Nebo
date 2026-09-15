@@ -21,6 +21,7 @@ public class AMDbContext : IdentityDbContext<ApplicationUser>, IAMDbContext
     public DbSet<AstronomicalEvent> AstronomicalEvents => Set<AstronomicalEvent>();
     public DbSet<Constellation> Constellations => Set<Constellation>();
     public DbSet<SolarSystemBody> SolarSystemBodies => Set<SolarSystemBody>();
+    public DbSet<DeepSkyObject> DeepSkyObjects { get; set; }
 
     public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) => base.SaveChangesAsync(cancellationToken);
     public Task<IDbContextTransaction> BeginTransactionAsync(CancellationToken cancellationToken = default) => base.Database.BeginTransactionAsync(cancellationToken);

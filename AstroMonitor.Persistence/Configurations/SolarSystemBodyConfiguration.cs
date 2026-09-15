@@ -26,5 +26,7 @@ public class SolarSystemBodyConfiguration : IEntityTypeConfiguration<SolarSystem
         builder.Property(a => a.RadiusKm)
             .IsRequired()
             .HasPrecision(10, 2);
+        
+        builder.Property(x => x.ImageUrl).IsRequired(false).HasMaxLength(500);
     }
 }

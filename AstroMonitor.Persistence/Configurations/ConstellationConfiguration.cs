@@ -27,5 +27,7 @@ public class ConstellationConfiguration : IEntityTypeConfiguration<Constellation
         builder.Property(c => c.Family)
             .IsRequired()
             .HasMaxLength(50);
+        
+        builder.Property(x => x.ImageUrl).IsRequired(false).HasMaxLength(500);
     }
 }

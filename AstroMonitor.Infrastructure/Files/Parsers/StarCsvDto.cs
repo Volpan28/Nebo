@@ -12,6 +12,8 @@ public record StarCsvDto
     public double Distance { get; init; }
     public double Magnitude { get; init; }
     public double ColorIndex { get; init; }
+    public string? Description { get; init; } 
+    public string? ImageUrl { get; init; } 
     public string? Constellation { get; init; }
 }
 

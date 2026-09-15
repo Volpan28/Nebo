@@ -36,7 +36,9 @@ public class StarCsvParser : IStarCsvParser
                     record.Distance,
                     record.Magnitude,
                     record.ColorIndex,
-                    string.IsNullOrWhiteSpace(record.Constellation) ? null : record.Constellation
+                    string.IsNullOrWhiteSpace(record.Constellation) ? null : record.Constellation,
+                    null, 
+                    null 
                 );
             }
         }

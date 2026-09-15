@@ -36,6 +36,10 @@ public class StarConfiguration : IEntityTypeConfiguration<Star>
         builder.Property(s => s.ColorIndex)
             .HasPrecision(4, 2);
         
+        builder.Property(x => x.Description).IsRequired(false);
+        
+        builder.Property(x => x.ImageUrl).IsRequired(false).HasMaxLength(500);
+        
         builder.HasOne(s => s.Constellation)
             .WithMany()
             .HasForeignKey(a => a.ConstellationId)
