@@ -13,4 +13,9 @@ public interface IAstronomyMathService
     /// <param name="utcNow">Поточний час UTC</param>
     /// <returns>Висота над горизонтом у градусах (-90 до +90)</returns>
     double CalculateAltitude(double rightAscensionHours, double declinationDegrees, double latitude, double longitude, DateTime utcNow);
+    
+    (double RightAscensionHours, double DeclinationDegrees) GetEquatorialFromKeplerian(
+        double a, double e, double i, double M, double w, double node, double epoch, 
+        double earthA, double earthE, double earthI, double earthM, double earthW, double earthNode, double earthEpoch, 
+        DateTime utcNow);
 }

@@ -18,4 +18,10 @@
       <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.17" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Reference Include="QuestPDF">
+        <HintPath>C:\Users\User\.nuget\packages\questpdf\2026.9.0\lib\net8.0\QuestPDF.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
 </Project>
