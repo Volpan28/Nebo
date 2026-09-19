@@ -43,10 +43,15 @@ public class AstronomyMathService : IAstronomyMathService
         double earthA, double earthE, double earthI, double earthM, double earthW, double earthNode, double earthEpoch, 
         DateTime utcNow)
     {
-        // Викликаємо статичну математику з Інфраструктури
         return AstronomyMath.GetEquatorialFromKeplerian(
             a, e, i, M, w, node, epoch, 
             earthA, earthE, earthI, earthM, earthW, earthNode, earthEpoch, 
             utcNow);
+    }
+
+    public (double Altitude, double Azimuth) GetHorizontalCoordinates(double raHours, double decDegrees, double latDegrees,
+        double lonDegrees, DateTime utcNow)
+    {
+        return AstronomyMath.GetHorizontalCoordinates(raHours, decDegrees, latDegrees, lonDegrees, utcNow);
     }
 }

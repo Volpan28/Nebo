@@ -18,4 +18,7 @@ public interface IAstronomyMathService
         double a, double e, double i, double M, double w, double node, double epoch, 
         double earthA, double earthE, double earthI, double earthM, double earthW, double earthNode, double earthEpoch, 
         DateTime utcNow);
+
+    (double Altitude, double Azimuth) GetHorizontalCoordinates(
+        double raHours, double decDegrees, double latDegrees, double lonDegrees, DateTime utcNow);
 }

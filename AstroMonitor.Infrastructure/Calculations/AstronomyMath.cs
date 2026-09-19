@@ -127,4 +127,43 @@ public static class AstronomyMath
 
         return (x, y, z);
     }
+    
+    /// <summary>
+    /// Обчислює горизонтальні координати (Висота та Азимут) для заданих екваторіальних координат.
+    /// </summary>
+    public static (double Altitude, double Azimuth) GetHorizontalCoordinates(
+        double raHours, double decDegrees, double latDegrees, double lonDegrees, DateTime utcNow)
+    {
+        double jd = GetJulianDate(utcNow);
+        double lstHours = GetLocalSiderealTime(jd, lonDegrees);
+
+        // Годинний кут (Hour Angle)
+        double haHours = lstHours - raHours;
+        if (haHours < 0) haHours += 24.0;
+
+        double haRad = haHours * 15.0 * Math.PI / 180.0;
+        double decRad = decDegrees * Math.PI / 180.0;
+        double latRad = latDegrees * Math.PI / 180.0;
+
+        // 1. Висота (Altitude)
+        double sinAlt = Math.Sin(decRad) * Math.Sin(latRad) + Math.Cos(decRad) * Math.Cos(latRad) * Math.Cos(haRad);
+        double altRad = Math.Asin(sinAlt);
+        double altDegrees = altRad * 180.0 / Math.PI;
+
+        // 2. Азимут (Azimuth)
+        double cosAz = (Math.Sin(decRad) - Math.Sin(altRad) * Math.Sin(latRad)) / (Math.Cos(altRad) * Math.Cos(latRad));
+        // Запобігаємо помилкам округлення (NaN)
+        cosAz = Math.Max(-1.0, Math.Min(1.0, cosAz)); 
+        
+        double azRad = Math.Acos(cosAz);
+        double azDegrees = azRad * 180.0 / Math.PI;
+
+        // Коригування квадранта для азимута
+        if (Math.Sin(haRad) > 0)
+        {
+            azDegrees = 360.0 - azDegrees;
+        }
+
+        return (altDegrees, azDegrees);
+    }
 }
