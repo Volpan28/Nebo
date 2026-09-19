@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using System.Net;
+using System.Net.Http;
 
 namespace AstroMonitor.Infrastructure;
 
@@ -55,6 +57,23 @@ public static class DependencyInjection
                 };
             });
         
+        services.AddHttpClient("ImageDownloader", client =>
+            {
+                client.DefaultRequestHeaders.Add("User-Agent", "AstroMonitor/1.0 (volodymyr.panteleimin@gmail.com) HttpClient/DotNet");
+            
+                client.DefaultRequestHeaders.Add("Referer", "https://noirlab.edu/");
+            
+                client.DefaultRequestHeaders.Add("Accept", "image/webp,image/jpeg,image/png,image/svg+xml,*/*;q=0.8");
+                client.DefaultRequestHeaders.Add("Accept-Language", "en-US,en;q=0.5");
+                client.Timeout = TimeSpan.FromSeconds(20);
+            })
+            .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+            {
+                AllowAutoRedirect = true,
+                MaxAutomaticRedirections = 5,
+                AutomaticDecompression = DecompressionMethods.All
+            });
+
         services.AddHttpClient();
         
         services.AddScoped<IUserManager, UserManagerService>();

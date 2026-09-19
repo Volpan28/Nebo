@@ -2,6 +2,7 @@
 using AstroMonitor.Application.Common.Interfaces;
 using AstroMonitor.Application.Common.Models;
 using CsvHelper;
+using Microsoft.Extensions.Logging;
 using QuestPDF.Helpers;
 using QuestPDF.Infrastructure;
 using QuestPDF.Fluent;
@@ -11,10 +12,14 @@ namespace AstroMonitor.Infrastructure.Services;
 public class ReportGeneratorService : IReportGeneratorService
 {
     private readonly IHttpClientFactory _httpClientFactory;
+    private readonly ILogger<ReportGeneratorService> _logger;
+    
+    private static readonly SemaphoreSlim _semaphore = new(2, 2); 
 
-    public ReportGeneratorService(IHttpClientFactory httpClientFactory)
+    public ReportGeneratorService(IHttpClientFactory httpClientFactory, ILogger<ReportGeneratorService> logger)
     {
         _httpClientFactory = httpClientFactory;
+        _logger = logger;
         QuestPDF.Settings.License = LicenseType.Community;
     }
 
@@ -32,7 +37,7 @@ public class ReportGeneratorService : IReportGeneratorService
 
     public async Task<byte[]> GeneratePdfAsync(ReportMetadataDto metadata, IEnumerable<VisibilityPdfItemDto> items, CancellationToken cancellationToken)
     {
-        var httpClient = _httpClientFactory.CreateClient();
+        var httpClient = _httpClientFactory.CreateClient("ImageDownloader");
         var imageTasks = new Dictionary<string, Task<byte[]>>();
 
         var categoryOrder = new List<string> { "Planets", "Moons", "Deep Sky Objects", "Constellations", "Bright Stars" };
@@ -49,7 +54,7 @@ public class ReportGeneratorService : IReportGeneratorService
         {
             if (!string.IsNullOrEmpty(obj.ImageUrl) && !imageTasks.ContainsKey(obj.ImageUrl))
             {
-                imageTasks[obj.ImageUrl] = DownloadImageAsync(httpClient, obj.ImageUrl, cancellationToken);
+                imageTasks[obj.ImageUrl] = DownloadImageThrottledAsync(httpClient, obj.ImageUrl, cancellationToken);
             }
         }
         
@@ -100,9 +105,14 @@ public class ReportGeneratorService : IReportGeneratorService
                                 row.ConstantItem(120).Height(120).Background(Colors.Grey.Lighten3).AlignCenter().AlignMiddle().Element(e => 
                                 {
                                     if (!string.IsNullOrEmpty(obj.ImageUrl) && imageCache.TryGetValue(obj.ImageUrl, out var imgBytes) && imgBytes != null)
-                                        e.Image(imgBytes).FitArea();
+                                    {
+                                        try { e.Image(imgBytes).FitArea(); }
+                                        catch { e.Text("Format Error").FontSize(10).FontColor(Colors.Red.Medium); }
+                                    }
                                     else 
+                                    {
                                         e.Text("No Photo").FontSize(10).FontColor(Colors.Grey.Medium);
+                                    }
                                 });
 
                                 row.RelativeItem().PaddingLeft(15).Column(textCol =>
@@ -133,19 +143,31 @@ public class ReportGeneratorService : IReportGeneratorService
         return document.GeneratePdf();
     }
 
-    private async Task<byte[]> DownloadImageAsync(HttpClient client, string url, CancellationToken cancellationToken)
+    private async Task<byte[]> DownloadImageThrottledAsync(HttpClient client, string url, CancellationToken cancellationToken)
     {
+        await _semaphore.WaitAsync(cancellationToken);
         try 
         { 
-            client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36");
-        
-            client.Timeout = TimeSpan.FromSeconds(10);
-        
-            return await client.GetByteArrayAsync(url, cancellationToken); 
+            await Task.Delay(400, cancellationToken);
+
+            var response = await client.GetAsync(url, cancellationToken);
+            
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogWarning("Failed to download image from {Url}. Status Code: {StatusCode}", url, response.StatusCode);
+                return null;
+            }
+
+            return await response.Content.ReadAsByteArrayAsync(cancellationToken); 
         }
-        catch 
+        catch (Exception ex)
         { 
+            _logger.LogError(ex, "Error while downloading image from {Url}", url);
             return null; 
+        }
+        finally
+        {
+            _semaphore.Release();
         }
     }
 }
