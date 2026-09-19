@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import type { SkyMapItemDto } from '../types/skyMap';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://localhost:7230';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5162';
 const SKYMAP_API_URL = `${API_BASE_URL}/api/skymap`;
 
 export interface Location {

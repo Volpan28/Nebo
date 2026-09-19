@@ -65,7 +65,7 @@ export default function TimeControlPanel() {
   };
 
   return (
-    <div className="absolute bottom-0 left-0 right-0 z-10 flex flex-col items-center gap-3 bg-black/70 px-6 py-4 text-white backdrop-blur-md">
+    <div className="absolute bottom-6 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-3 rounded-2xl border border-white/10 bg-black/70 px-6 py-4 text-white backdrop-blur-md">
       <div className="flex flex-wrap items-center justify-center gap-3">
         <input
           type="date"

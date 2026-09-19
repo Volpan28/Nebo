@@ -85,7 +85,7 @@ export default function SkyCanvas() {
   const selectObject = useAstroStore((state) => state.selectObject);
 
   return (
-    <div className="absolute inset-0 -z-10 h-full w-full">
+    <div className="absolute inset-0 h-full w-full -z-10 bg-black">
       <Canvas camera={{ position: [0, 0, 0.1], fov: 75, near: 0.1, far: 1000 }}>
         <color attach="background" args={['#000008']} />
         <ambientLight intensity={0.5} />

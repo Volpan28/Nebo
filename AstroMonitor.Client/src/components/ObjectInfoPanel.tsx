@@ -10,7 +10,7 @@ export default function ObjectInfoPanel() {
   }
 
   return (
-    <div className="absolute left-4 top-4 w-64 rounded-lg bg-black/70 p-4 text-white backdrop-blur-md">
+    <div className="absolute left-4 top-4 z-10 w-64 rounded-lg bg-black/70 p-4 text-white backdrop-blur-md">
       <div className="flex items-start justify-between gap-2">
         <h2 className="text-lg font-semibold">{selectedObject.name}</h2>
         <button
