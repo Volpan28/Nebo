@@ -55,10 +55,13 @@ public static class DependencyInjection
                 };
             });
         
+        services.AddHttpClient();
+        
         services.AddScoped<IUserManager, UserManagerService>();
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
         services.AddScoped<IStarCsvParser, StarCsvParser>();
         services.AddScoped<IAstronomyMathService, AstronomyMathService>();
+        services.AddScoped<IReportGeneratorService, ReportGeneratorService>();
         return services;
     }
 }

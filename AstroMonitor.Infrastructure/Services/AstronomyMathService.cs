@@ -37,4 +37,16 @@ public class AstronomyMathService : IAstronomyMathService
         double altitudeDegrees = Math.Asin(sinAltitude) * RadiansToDegrees;
         return altitudeDegrees;
     }
+    
+    public (double RightAscensionHours, double DeclinationDegrees) GetEquatorialFromKeplerian(
+        double a, double e, double i, double M, double w, double node, double epoch, 
+        double earthA, double earthE, double earthI, double earthM, double earthW, double earthNode, double earthEpoch, 
+        DateTime utcNow)
+    {
+        // Викликаємо статичну математику з Інфраструктури
+        return AstronomyMath.GetEquatorialFromKeplerian(
+            a, e, i, M, w, node, epoch, 
+            earthA, earthE, earthI, earthM, earthW, earthNode, earthEpoch, 
+            utcNow);
+    }
 }
