@@ -3,6 +3,8 @@ import { Billboard, Text } from '@react-three/drei';
 import { altAzToCartesian } from '../utils/coordinates';
 import CameraRig from '../three/CameraRig';
 import StarField from '../three/StarField';
+import DynamicObjects from "../three/DynamicObjects.tsx";
+
 
 const SKY_RADIUS = 1000;
 
@@ -45,20 +47,20 @@ const CardinalPoints = () => (
 );
 
 const SkyCanvas = () => {
-  return (
-      <div className="absolute inset-0 w-full h-full">
-        <Canvas camera={{ position: [0, 0, 0], fov: 75, near: 0.01, far: 5000 }}>
-          <CameraRig />
+    return (
+        <div className="absolute inset-0 w-full h-full">
+            <Canvas camera={{ position: [0, 0, 0], fov: 75, near: 0.01, far: 5000 }}>
+                <CameraRig />
+                <ambientLight intensity={0.3} />
 
-          <ambientLight intensity={0.3} />
-
-          <SkyBackground />
-          <StarField />
-          <Ground />
-          <CardinalPoints />
-        </Canvas>
-      </div>
-  );
+                <SkyBackground />
+                <StarField />
+                <DynamicObjects /> {/* Додано рендер вирахуваних об'єктів */}
+                <Ground />
+                <CardinalPoints />
+            </Canvas>
+        </div>
+    );
 };
 
 export default SkyCanvas;

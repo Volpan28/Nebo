@@ -81,6 +81,8 @@ export default function StarField() {
   }, [stars]);
 
   useEffect(() => {
+    useStarCatalogStore.getState().fetchCatalog();
+
     if (groupRef.current) {
       groupRef.current.matrixAutoUpdate = false;
     }
