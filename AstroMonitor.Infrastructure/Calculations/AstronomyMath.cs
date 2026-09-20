@@ -5,8 +5,10 @@ public static class AstronomyMath
     /// <summary>
     /// Обчислює Юліанську дату (JD) для заданого часу UTC.
     /// </summary>
-    public static double GetJulianDate(DateTime utc)
+    public static double GetJulianDate(DateTime utcNow)
     {
+        DateTime utc = utcNow.ToUniversalTime();
+        
         int y = utc.Year;
         int m = utc.Month;
         double d = utc.Day + (utc.Hour / 24.0) + (utc.Minute / 1440.0) + (utc.Second / 86400.0);
@@ -165,5 +167,41 @@ public static class AstronomyMath
         }
 
         return (altDegrees, azDegrees);
+    }
+    
+    /// <summary>
+    /// Розраховує екваторіальні координати (RA, Dec) для Сонця, інвертуючи вектор Землі.
+    /// </summary>
+    public static (double RightAscensionHours, double DeclinationDegrees) GetSunEquatorial(
+        double earthA, double earthE, double earthI, double earthM, double earthW, double earthNode, double earthEpoch, 
+        DateTime utcNow)
+    {
+        // Про всяк випадок гарантуємо, що час у UTC
+        DateTime utc = utcNow.ToUniversalTime();
+        double jd = GetJulianDate(utc);
+        
+        // Отримуємо геліоцентричні координати Землі
+        var earthHeliocentric = GetHeliocentricXYZ(earthA, earthE, earthI, earthM, earthW, earthNode, earthEpoch, jd);
+
+        // Вектор від Землі до Сонця — це інвертований вектор від Сонця до Землі
+        double gx = -earthHeliocentric.x;
+        double gy = -earthHeliocentric.y;
+        double gz = -earthHeliocentric.z;
+
+        // Перетворення екліптичних координат в екваторіальні
+        double obliquityRad = 23.43928 * Math.PI / 180.0;
+        double eqX = gx;
+        double eqY = gy * Math.Cos(obliquityRad) - gz * Math.Sin(obliquityRad);
+        double eqZ = gy * Math.Sin(obliquityRad) + gz * Math.Cos(obliquityRad);
+
+        double raRad = Math.Atan2(eqY, eqX);
+        if (raRad < 0) raRad += 2 * Math.PI;
+        double raHours = (raRad * 180.0 / Math.PI) / 15.0;
+
+        double distance = Math.Sqrt(eqX * eqX + eqY * eqY + eqZ * eqZ);
+        double decRad = Math.Asin(eqZ / distance);
+        double decDegrees = decRad * 180.0 / Math.PI;
+
+        return (raHours, decDegrees);
     }
 }

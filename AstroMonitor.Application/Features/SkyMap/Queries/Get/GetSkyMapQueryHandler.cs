@@ -26,19 +26,35 @@ public class GetSkyMapQueryHandler : IRequestHandler<GetSkyMapQuery, IEnumerable
         var bodies = (await connection.QueryAsync<SolarSystemBody>("SELECT * FROM \"SolarSystemBody\"")).ToList();
         var earth = bodies.FirstOrDefault(p => p.Id == "earth");
 
-        foreach (var body in bodies.Where(p => p.Id != "sun" && p.Id != "earth"))
+        foreach (var body in bodies.Where(p => p.Id != "earth"))
         {
-            var (ra, dec) = _mathService.GetEquatorialFromKeplerian(
-                body.SemiMajorAxis, body.Eccentricity, body.Inclination, body.MeanAnomaly, body.ArgumentOfPeriapsis, body.LongitudeOfAscendingNode, body.Epoch,
-                earth.SemiMajorAxis, earth.Eccentricity, earth.Inclination, earth.MeanAnomaly, earth.ArgumentOfPeriapsis, earth.LongitudeOfAscendingNode, earth.Epoch,
-                request.ObservationDate);
+            double ra, dec;
+            
+            if (body.Id == "sun")
+            {
+                (ra, dec) = _mathService.GetSunEquatorial(
+                    earth.SemiMajorAxis, earth.Eccentricity, earth.Inclination, earth.MeanAnomaly, earth.ArgumentOfPeriapsis, earth.LongitudeOfAscendingNode, earth.Epoch,
+                    request.ObservationDate);
+            }
+            else 
+            {
+                (ra, dec) = _mathService.GetEquatorialFromKeplerian(
+                    body.SemiMajorAxis, body.Eccentricity, body.Inclination, body.MeanAnomaly, body.ArgumentOfPeriapsis, body.LongitudeOfAscendingNode, body.Epoch,
+                    earth.SemiMajorAxis, earth.Eccentricity, earth.Inclination, earth.MeanAnomaly, earth.ArgumentOfPeriapsis, earth.LongitudeOfAscendingNode, earth.Epoch,
+                    request.ObservationDate);
+            }
 
             var (alt, az) = _mathService.GetHorizontalCoordinates(ra, dec, request.Latitude, request.Longitude, request.ObservationDate);
             
             if (alt > 0)
             {
                 string category = body.BodyType == AstroBodyType.Planet ? "Planet" : "Moon";
-                double magnitude = category == "Planet" ? -2.0 : 0.0; 
+                if (body.Id == "sun") category = "Planet"; 
+
+                double magnitude = 0;
+                if (body.Id == "sun") magnitude = -26.7;
+                else if (body.Id == "moon") magnitude = -12.7;
+                else if (category == "Planet") magnitude = -2.0;
 
                 mapItems.Add(new SkyMapItemDto(body.Id, body.Name, category, alt, az, magnitude, body.ImageUrl ?? "default_texture"));
             }
@@ -59,7 +75,7 @@ public class GetSkyMapQueryHandler : IRequestHandler<GetSkyMapQuery, IEnumerable
 
         var stars = (await connection.QueryAsync<dynamic>(
             "SELECT \"Id\", \"ProperName\", \"RightAscension\", \"Declination\", \"Magnitude\", \"ImageUrl\", \"ConstellationId\" " +
-            "FROM \"Stars\" WHERE \"Magnitude\" <= 3.5")).ToList();
+            "FROM \"Stars\" WHERE \"Magnitude\" <= 3.5 AND \"Magnitude\" > -20")).ToList();
 
         foreach (var star in stars)
         {

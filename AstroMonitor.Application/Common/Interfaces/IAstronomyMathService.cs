@@ -21,4 +21,8 @@ public interface IAstronomyMathService
 
     (double Altitude, double Azimuth) GetHorizontalCoordinates(
         double raHours, double decDegrees, double latDegrees, double lonDegrees, DateTime utcNow);
+
+    (double RightAscensionHours, double DeclinationDegrees) GetSunEquatorial(
+        double earthA, double earthE, double earthI, double earthM, double earthW, double earthNode, double earthEpoch,
+        DateTime utcNow);
 }

@@ -54,4 +54,13 @@ public class AstronomyMathService : IAstronomyMathService
     {
         return AstronomyMath.GetHorizontalCoordinates(raHours, decDegrees, latDegrees, lonDegrees, utcNow);
     }
+
+    public (double RightAscensionHours, double DeclinationDegrees) GetSunEquatorial(
+        double earthA, double earthE, double earthI, double earthM, double earthW, double earthNode, double earthEpoch,
+        DateTime utcNow)
+    {
+        return AstronomyMath.GetSunEquatorial(
+            earthA, earthE, earthI, earthM, earthW, earthNode, earthEpoch, 
+            utcNow);
+    }
 }
