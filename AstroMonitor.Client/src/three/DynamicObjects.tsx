@@ -7,9 +7,10 @@ import { useSimClockStore } from '../store/useSimClockStore';
 import { useCameraStore } from '../store/useCameraStore';
 import { equatorialToUnitVector, buildEquatorialToHorizontalMatrix, localSiderealTimeDeg } from '../utils/equatorial';
 
-const TargetReticle = () => {
-    const s = 12;
-    const l = 6;
+const TargetReticle = ({ radius, scale }: { radius: number; scale: number }) => {
+    const s = radius + (3 * Math.max(0.15, scale));
+    const l = 5 * Math.max(0.15, scale);
+    const reticleColor = "#00ffcc";
 
     const pointsTopLeft = [[-s, s - l, 0], [-s, s, 0], [-s + l, s, 0]] as [number, number, number][];
     const pointsTopRight = [[s - l, s, 0], [s, s, 0], [s, s - l, 0]] as [number, number, number][];
@@ -18,10 +19,10 @@ const TargetReticle = () => {
 
     return (
         <group>
-            <Line points={pointsTopLeft} color="#00ffcc" lineWidth={2} />
-            <Line points={pointsTopRight} color="#00ffcc" lineWidth={2} />
-            <Line points={pointsBottomLeft} color="#00ffcc" lineWidth={2} />
-            <Line points={pointsBottomRight} color="#00ffcc" lineWidth={2} />
+            <Line points={pointsTopLeft} color={reticleColor} lineWidth={2} />
+            <Line points={pointsTopRight} color={reticleColor} lineWidth={2} />
+            <Line points={pointsBottomLeft} color={reticleColor} lineWidth={2} />
+            <Line points={pointsBottomRight} color={reticleColor} lineWidth={2} />
         </group>
     );
 };
@@ -50,7 +51,7 @@ export default function DynamicObjects() {
         if (groupRef.current) {
             groupRef.current.matrixAutoUpdate = false;
         }
-    }, [] );
+    }, []);
 
     useFrame(() => {
         const { location } = useAstroStore.getState();
@@ -67,8 +68,11 @@ export default function DynamicObjects() {
         <group ref={groupRef}>
             {skyObjects.map((obj) => {
                 const isOurMoon = obj.id.toLowerCase() === 'moon';
+                const isPlanet = obj.category === 'Planet';
+                const isSatellite = obj.category === 'Moon' && !isOurMoon;
+                const isStar = obj.category.includes('Star');
 
-                if (obj.category === 'Moon' && !isOurMoon && fovDeg > 15) {
+                if (isSatellite && fovDeg > 10) {
                     return null;
                 }
 
@@ -77,6 +81,34 @@ export default function DynamicObjects() {
                     raHours: obj.rightAscension,
                     decDeg: obj.declination
                 });
+
+                const scale = fovDeg / 75;
+
+                let baseRadius = 1.0;
+                let color = "#ffffff";
+                let minScale = 0.05;
+
+                if (isOurMoon) {
+                    baseRadius = 5.0;
+                    color = "#e2e8f0";
+                    minScale = 0.15; 
+                } else if (isPlanet) {
+                    baseRadius = 4.0;
+                    color = "#fbbf24";
+                    minScale = 0.15; 
+                } else if (isSatellite) {
+                    baseRadius = 1.5;
+                    color = "#94a3b8";
+                    minScale = 0.15; 
+                } else if (isStar) {
+                    baseRadius = 0.8;
+                    color = "#ffffff";
+                    minScale = 0.02; 
+                }
+
+                const currentRadius = baseRadius * Math.max(minScale, scale);
+                const fontSize = 8 * Math.max(0.15, scale);
+                const showText = isSelected || !isSatellite;
 
                 return (
                     <Billboard key={obj.id} position={[x * 900, y * 900, z * 900]}>
@@ -88,19 +120,22 @@ export default function DynamicObjects() {
                             }}
                         >
                             <mesh>
-                                <circleGeometry args={[isOurMoon ? 8 : 5, 16]} />
-                                <meshBasicMaterial color={isOurMoon ? "#ffffff" : "#00ffcc"} />
+                                <circleGeometry args={[currentRadius, 16]} />
+                                <meshBasicMaterial color={color} />
                             </mesh>
 
-                            {isSelected && <TargetReticle />}
+                            {isSelected && <TargetReticle radius={currentRadius} scale={scale} />}
 
-                            <Text
-                                position={[0, isOurMoon ? 14 : 12, 0]}
-                                fontSize={isOurMoon ? 10 : 8}
-                                color={isSelected ? "#00ffcc" : "white"}
-                            >
-                                {obj.name}
-                            </Text>
+                            {showText && (
+                                <Text
+                                    position={[0, currentRadius + (2 * scale), 0]}
+                                    anchorY="bottom"
+                                    fontSize={fontSize}
+                                    color={isSelected ? "#00ffcc" : "white"}
+                                >
+                                    {obj.name}
+                                </Text>
+                            )}
                         </group>
                     </Billboard>
                 );
