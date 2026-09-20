@@ -2,14 +2,17 @@ import { useEffect } from 'react';
 import ObjectInfoPanel from './components/ObjectInfoPanel';
 import SkyCanvas from './components/SkyCanvas';
 import TimeControlPanel from './components/TimeControlPanel';
-import { useAstroStore } from './store/useAstroStore';
+import { useStarCatalogStore } from './store/useStarCatalogStore';
+import { useSimClockTicker } from './hooks/useSimClockTicker';
 
 function App() {
-    const fetchSkyMap = useAstroStore((state) => state.fetchSkyMap);
+    const fetchCatalog = useStarCatalogStore((state) => state.fetchCatalog);
 
     useEffect(() => {
-        fetchSkyMap();
-    }, [fetchSkyMap]);
+        fetchCatalog();
+    }, [fetchCatalog]);
+
+    useSimClockTicker();
 
     return (
         <div className="relative h-screen w-screen overflow-hidden text-white">
