@@ -36,6 +36,30 @@ public class GetSkyMapQueryHandler : IRequestHandler<GetSkyMapQuery, IEnumerable
                     earth.SemiMajorAxis, earth.Eccentricity, earth.Inclination, earth.MeanAnomaly, earth.ArgumentOfPeriapsis, earth.LongitudeOfAscendingNode, earth.Epoch,
                     request.ObservationDate);
             }
+            else if (!string.IsNullOrEmpty(body.ParentId))
+            {
+                // Якщо це супутник, знаходимо його планету
+                var parent = bodies.FirstOrDefault(p => p.Id == body.ParentId);
+                
+                // Якщо супутник (наприклад, Місяць) обертається навколо Землі, використовуємо параметри Землі як планети
+                if (body.ParentId == "earth")
+                {
+                    parent = earth;
+                }
+
+                if (parent != null)
+                {
+                    (ra, dec) = _mathService.GetSatelliteEquatorial(
+                        body.SemiMajorAxis, body.Eccentricity, body.Inclination, body.MeanAnomaly, body.ArgumentOfPeriapsis, body.LongitudeOfAscendingNode, body.Epoch,
+                        parent.SemiMajorAxis, parent.Eccentricity, parent.Inclination, parent.MeanAnomaly, parent.ArgumentOfPeriapsis, parent.LongitudeOfAscendingNode, parent.Epoch,
+                        earth.SemiMajorAxis, earth.Eccentricity, earth.Inclination, earth.MeanAnomaly, earth.ArgumentOfPeriapsis, earth.LongitudeOfAscendingNode, earth.Epoch,
+                        request.ObservationDate);
+                }
+                else
+                {
+                    ra = 0; dec = 0; // Fallback, якщо планети немає в базі
+                }
+            }
             else 
             {
                 (ra, dec) = _mathService.GetEquatorialFromKeplerian(
@@ -56,7 +80,7 @@ public class GetSkyMapQueryHandler : IRequestHandler<GetSkyMapQuery, IEnumerable
                 else if (body.Id == "moon") magnitude = -12.7;
                 else if (category == "Planet") magnitude = -2.0;
 
-                mapItems.Add(new SkyMapItemDto(body.Id, body.Name, category, alt, az, magnitude, body.ImageUrl ?? "default_texture"));
+                mapItems.Add(new SkyMapItemDto(body.Id, body.Name, category, ra, dec, alt, az, magnitude, body.ImageUrl ?? "default_texture"));
             }
         }
 
@@ -69,7 +93,7 @@ public class GetSkyMapQueryHandler : IRequestHandler<GetSkyMapQuery, IEnumerable
 
             if (alt > 0)
             {
-                mapItems.Add(new SkyMapItemDto(dso.Id.ToString(), (string)dso.Name, "Deep Sky Object", alt, az, 1.0, (string)dso.ImageUrl ?? "default_nebula"));
+                mapItems.Add(new SkyMapItemDto(dso.Id.ToString(), (string)dso.Name, "Deep Sky Object", (double)dso.RightAscension, (double)dso.Declination, alt, az, 1.0, (string)dso.ImageUrl ?? "default_nebula"));
             }
         }
 
@@ -87,7 +111,12 @@ public class GetSkyMapQueryHandler : IRequestHandler<GetSkyMapQuery, IEnumerable
                 mapItems.Add(new SkyMapItemDto(
                     star.Id.ToString(), 
                     (string)star.ProperName ?? "Star", 
-                    category, alt, az, (double)star.Magnitude, (string)star.ImageUrl ?? "white"));
+                    category, 
+                    (double)star.RightAscension, 
+                    (double)star.Declination, 
+                    alt, az, 
+                    (double)star.Magnitude, 
+                    (string)star.ImageUrl ?? "white"));
             }
         }
 
@@ -111,7 +140,10 @@ public class GetSkyMapQueryHandler : IRequestHandler<GetSkyMapQuery, IEnumerable
                         conId, 
                         (string)con.EnglishName, 
                         "Constellation", 
-                        alt, az, -1.0, (string)con.ImageUrl ?? ""));
+                        avgRa, avgDec, 
+                        alt, az, 
+                        -1.0, 
+                        (string)con.ImageUrl ?? ""));
                 }
             }
         }

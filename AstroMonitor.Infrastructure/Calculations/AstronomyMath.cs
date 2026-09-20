@@ -204,4 +204,51 @@ public static class AstronomyMath
 
         return (raHours, decDegrees);
     }
+    
+    /// <summary>
+    /// Розраховує екваторіальні координати для супутника, додаючи його планетоцентричний вектор до геліоцентричного вектора планети.
+    /// </summary>
+    public static (double RightAscensionHours, double DeclinationDegrees) GetSatelliteEquatorial(
+        double satA, double satE, double satI, double satM, double satW, double satNode, double satEpoch,
+        double pA, double pE, double pI, double pM, double pW, double pNode, double pEpoch,
+        double earthA, double earthE, double earthI, double earthM, double earthW, double earthNode, double earthEpoch,
+        DateTime utcNow)
+    {
+        double jd = GetJulianDate(utcNow);
+
+        // 1. Координати планети відносно Сонця
+        var planetHelio = GetHeliocentricXYZ(pA, pE, pI, pM, pW, pNode, pEpoch, jd);
+        
+        // 2. Координати супутника відносно планети 
+        var satPlanetocentric = GetHeliocentricXYZ(satA, satE, satI, satM, satW, satNode, satEpoch, jd);
+        
+        // 3. Координати супутника відносно Сонця (сума векторів)
+        double satHelioX = planetHelio.x + satPlanetocentric.x;
+        double satHelioY = planetHelio.y + satPlanetocentric.y;
+        double satHelioZ = planetHelio.z + satPlanetocentric.z;
+
+        // 4. Координати Землі відносно Сонця
+        var earthHelio = GetHeliocentricXYZ(earthA, earthE, earthI, earthM, earthW, earthNode, earthEpoch, jd);
+
+        // 5. Геоцентричні координати супутника
+        double gx = satHelioX - earthHelio.x;
+        double gy = satHelioY - earthHelio.y;
+        double gz = satHelioZ - earthHelio.z;
+
+        // 6. Перехід в екваторіальні координати
+        double obliquityRad = 23.43928 * Math.PI / 180.0;
+        double eqX = gx;
+        double eqY = gy * Math.Cos(obliquityRad) - gz * Math.Sin(obliquityRad);
+        double eqZ = gy * Math.Sin(obliquityRad) + gz * Math.Cos(obliquityRad);
+
+        double raRad = Math.Atan2(eqY, eqX);
+        if (raRad < 0) raRad += 2 * Math.PI;
+        double raHours = (raRad * 180.0 / Math.PI) / 15.0;
+
+        double distance = Math.Sqrt(eqX * eqX + eqY * eqY + eqZ * eqZ);
+        double decRad = Math.Asin(eqZ / distance);
+        double decDegrees = decRad * 180.0 / Math.PI;
+
+        return (raHours, decDegrees);
+    }
 }

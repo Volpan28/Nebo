@@ -7,6 +7,7 @@ public class SolarSystemBody
     public string Id { get; private set; }
     public string Name { get; private set; }
     public AstroBodyType BodyType { get; private set; }
+    public string? ParentId { get; private set; }
     public double Epoch { get; private set; }
     public double SemiMajorAxis { get; private set; }
     public double Eccentricity { get; private set; }
@@ -21,7 +22,7 @@ public class SolarSystemBody
     
     private SolarSystemBody() {}
 
-    public SolarSystemBody(string id, string name, AstroBodyType bodyType, double epoch, double semiMajorAxis, 
+    public SolarSystemBody(string id, string name, AstroBodyType bodyType, string? parentId, double epoch, double semiMajorAxis, 
         double eccentricity, double inclination, double meanAnomaly, 
         double argumentOfPeriapsis, double longitudeOfAscendingNode, 
         double radiusKm, string description, string textureIdentifier, string imageUrl)
@@ -29,6 +30,7 @@ public class SolarSystemBody
         Id = id;
         Name = name;
         BodyType = bodyType;
+        ParentId = parentId;
         Epoch = epoch;
         SemiMajorAxis = semiMajorAxis;
         Eccentricity = eccentricity;

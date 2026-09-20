@@ -63,4 +63,17 @@ public class AstronomyMathService : IAstronomyMathService
             earthA, earthE, earthI, earthM, earthW, earthNode, earthEpoch, 
             utcNow);
     }
+    
+    public (double RightAscensionHours, double DeclinationDegrees) GetSatelliteEquatorial(
+        double satA, double satE, double satI, double satM, double satW, double satNode, double satEpoch,
+        double pA, double pE, double pI, double pM, double pW, double pNode, double pEpoch,
+        double earthA, double earthE, double earthI, double earthM, double earthW, double earthNode, double earthEpoch,
+        DateTime utcNow)
+    {
+        return AstronomyMath.GetSatelliteEquatorial(
+            satA, satE, satI, satM, satW, satNode, satEpoch,
+            pA, pE, pI, pM, pW, pNode, pEpoch,
+            earthA, earthE, earthI, earthM, earthW, earthNode, earthEpoch,
+            utcNow);
+    }
 }

@@ -25,4 +25,10 @@ public interface IAstronomyMathService
     (double RightAscensionHours, double DeclinationDegrees) GetSunEquatorial(
         double earthA, double earthE, double earthI, double earthM, double earthW, double earthNode, double earthEpoch,
         DateTime utcNow);
+    
+    (double RightAscensionHours, double DeclinationDegrees) GetSatelliteEquatorial(
+        double satA, double satE, double satI, double satM, double satW, double satNode, double satEpoch,
+        double pA, double pE, double pI, double pM, double pW, double pNode, double pEpoch,
+        double earthA, double earthE, double earthI, double earthM, double earthW, double earthNode, double earthEpoch,
+        DateTime utcNow);
 }

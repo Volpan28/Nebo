@@ -4,8 +4,10 @@ public record SkyMapItemDto(
     string Id,
     string Name,
     string Category,
+    double RightAscension,
+    double Declination,
     double Altitude,
     double Azimuth,
-    double Magnitude, 
+    double Magnitude,
     string TextureUrl
 );
